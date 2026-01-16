@@ -1,6 +1,6 @@
 import asyncio
 import threading
-from concurrent.futures import as_completed, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from unittest.mock import MagicMock
 
 import pytest

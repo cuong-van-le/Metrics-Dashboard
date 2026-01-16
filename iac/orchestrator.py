@@ -5,7 +5,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from config.logging_config import get_logger
-
 from iac.base import Resource, ResourceResult
 
 logger = get_logger(__name__)

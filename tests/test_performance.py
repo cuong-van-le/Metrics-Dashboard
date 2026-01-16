@@ -1,8 +1,7 @@
 import time
-
-import pytest
 from unittest.mock import MagicMock
 
+import pytest
 from botocore.exceptions import ClientError
 
 from config.main import Config
