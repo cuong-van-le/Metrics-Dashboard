@@ -8,7 +8,7 @@ class TestResourceValidator:
 
     def test_validate_bucket_name_valid(self):
         """Test valid bucket names."""
-        assert ResourceValidator.validate_bucket_name("my-bucket") is True  # noqa: B101
+        assert ResourceValidator.validate_bucket_name("my-bucket") is True  # nosec B101
         assert ResourceValidator.validate_bucket_name("my.bucket") is True  # noqa: B101
         assert ResourceValidator.validate_bucket_name("bucket123") is True  # noqa: B101
         assert ResourceValidator.validate_bucket_name("a" * 63) is True  # noqa: B101

@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import json
 import logging
-import subprocess  # noqa: B404
+import subprocess  # nosec B404
 import tempfile
 import time
 import zipfile
@@ -45,7 +45,7 @@ def _package_lambda_code(transform_dir: Path) -> bytes:
             with tempfile.TemporaryDirectory() as temp_dir:
                 temp_path = Path(temp_dir)
                 try:
-                    subprocess.run(  # noqa: B603, B607
+                    subprocess.run(  # nosec B603,B607
                         [
                             "pip",
                             "install",

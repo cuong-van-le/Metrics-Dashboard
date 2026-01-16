@@ -1,4 +1,4 @@
-import subprocess  # noqa: B404
+import subprocess  # nosec B404
 import sys
 import zipfile
 from pathlib import Path
@@ -29,7 +29,7 @@ def package_lambda():
             with tempfile.TemporaryDirectory() as temp_dir:
                 temp_path = Path(temp_dir)
                 try:
-                    subprocess.run(  # noqa: B603
+                    subprocess.run(  # nosec B603
                         [
                             sys.executable,
                             "-m",

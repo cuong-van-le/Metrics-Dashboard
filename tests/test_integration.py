@@ -65,7 +65,7 @@ def aws_clients(mock_aws_services, mock_env_vars):
                 ],
             }),
         )
-    except Exception:  # noqa: B110
+    except Exception:  # nosec B110
         pass
     
     return {
