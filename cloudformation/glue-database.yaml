@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS Glue Database for metrics-pc analytics data'
+
+Parameters:
+  DatabaseName:
+    Type: String
+    Default: metrics-pc
+    Description: Name of the Glue database
+
+  S3BucketName:
+    Type: String
+    Default: pc-analytics-321321z
+    Description: S3 bucket name where data is stored
+
+  S3Prefix:
+    Type: String
+    Default: analytics/
+    Description: S3 prefix for the database location
+
+Resources:
+  MetricsDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Ref DatabaseName
+        Description: 'Database for PC analytics metrics data'
+        LocationUri: !Sub 's3://${S3BucketName}/${S3Prefix}'
+        Parameters:
+          classification: 'parquet'
+          typeOfData: 'file'
+
+Outputs:
+  DatabaseName:
+    Description: 'Name of the created Glue database'
+    Value: !Ref MetricsDatabase
+    Export:
+      Name: !Sub '${AWS::StackName}-DatabaseName'
+
+  DatabaseArn:
+    Description: 'ARN of the created Glue database'
+    Value: !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:database/${MetricsDatabase}'
+    Export:
+      Name: !Sub '${AWS::StackName}-DatabaseArn'

@@ -1,0 +1,140 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS Glue Crawler to discover partitions and update analytics_raw_schema table'
+
+Parameters:
+  CrawlerName:
+    Type: String
+    Default: analytics-crawler
+    Description: Name of the Glue crawler
+
+  DatabaseName:
+    Type: String
+    Default: metrics-pc
+    Description: Name of the Glue database
+
+  TableName:
+    Type: String
+    Default: analytics_raw_schema
+    Description: Name of the Glue table to update
+
+  S3BucketName:
+    Type: String
+    Default: pc-analytics-321321z
+    Description: S3 bucket name where data is stored
+
+  S3Prefix:
+    Type: String
+    Default: analytics/
+    Description: S3 prefix for the crawler to scan
+
+  CrawlerRoleArn:
+    Type: String
+    Description: IAM role ARN for the Glue crawler (must have S3 and Glue permissions)
+    Default: ''
+
+  ScheduleExpression:
+    Type: String
+    Default: 'cron(0 * * * ? *)'
+    Description: 'Schedule expression (cron format). Default: hourly. Use "NONE" for manual runs only.'
+    AllowedValues:
+      - 'NONE'
+      - 'cron(0 * * * ? *)'
+      - 'cron(0 */6 * * ? *)'
+      - 'cron(0 0 * * ? *)'
+
+Resources:
+  CrawlerRole:
+    Type: AWS::IAM::Role
+    Condition: CreateCrawlerRole
+    Properties:
+      RoleName: !Sub '${CrawlerName}-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}/*'
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}'
+
+  AnalyticsCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: !Ref CrawlerName
+      Role: !If
+        - CreateCrawlerRole
+        - !GetAtt CrawlerRole.Arn
+        - !Ref CrawlerRoleArn
+      DatabaseName: !Ref DatabaseName
+      Description: 'Crawler to discover partitions in analytics data and update analytics_raw_schema table'
+      Targets:
+        S3Targets:
+          - Path: !Sub 's3://${S3BucketName}/${S3Prefix}'
+      SchemaChangePolicy:
+        UpdateBehavior: LOG
+        DeleteBehavior: LOG
+      TablePrefix: ''
+      Configuration: |
+        {
+          "Version": 1.0,
+          "CrawlerOutput": {
+            "Partitions": {
+              "AddOrUpdateBehavior": "InheritFromTable"
+            }
+          },
+          "Grouping": {
+              "TableGroupingPolicy": "CombineCompatibleSchemas"
+          }
+        }
+      RecrawlPolicy:
+        RecrawlBehavior: CRAWL_NEW_FOLDERS_ONLY
+      Schedule:
+        ScheduleExpression: !If
+          - HasSchedule
+          - !Ref ScheduleExpression
+          - !Ref 'AWS::NoValue'
+
+Conditions:
+  CreateCrawlerRole: !Equals [!Ref CrawlerRoleArn, '']
+  HasSchedule: !Not [!Equals [!Ref ScheduleExpression, 'NONE']]
+
+Outputs:
+  CrawlerName:
+    Description: 'Name of the created Glue crawler'
+    Value: !Ref AnalyticsCrawler
+    Export:
+      Name: !Sub '${AWS::StackName}-CrawlerName'
+
+  CrawlerArn:
+    Description: 'ARN of the created Glue crawler'
+    Value: !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${AnalyticsCrawler}'
+    Export:
+      Name: !Sub '${AWS::StackName}-CrawlerArn'
+
+  CrawlerRoleArn:
+    Description: 'ARN of the IAM role for the crawler'
+    Value: !If
+      - CreateCrawlerRole
+      - !GetAtt CrawlerRole.Arn
+      - !Ref CrawlerRoleArn
+    Export:
+      Name: !Sub '${AWS::StackName}-CrawlerRoleArn'
+
+  RunCrawlerCommand:
+    Description: 'AWS CLI command to manually run the crawler'
+    Value: !Sub 'aws glue start-crawler --name ${AnalyticsCrawler} --region ${AWS::Region}'
