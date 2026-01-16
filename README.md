@@ -117,11 +117,11 @@ The `--update-env` flag automatically updates your `.env` file with the ARNs of 
 
 The system includes CloudFormation templates for setting up AWS Glue resources, but you need to deploy and configure the crawler separately. The crawler is responsible for discovering partitions in your S3 data and updating the Glue catalog.
 
-Deploy the Glue resources using the CloudFormation templates in `cloudformation/`:
+Deploy the Glue resources using the CloudFormation templates in `.aws/cloudformation/`:
 
-1. Deploy the database: `glue-database.yaml`
-2. Deploy the table: `glue-table.yaml`
-3. Deploy the crawler: `glue-crawler.yaml`
+1. Deploy the database: `.aws/cloudformation/glue-database.yaml`
+2. Deploy the table: `.aws/cloudformation/glue-table.yaml`
+3. Deploy the crawler: `.aws/cloudformation/glue-crawler.yaml`
 
 Configure the crawler schedule according to your needs. The default is hourly, but you can set it to `NONE` for manual runs only.
 
@@ -188,7 +188,7 @@ roxxane/
 ├── [pipeline/](pipeline/)      # Data ingestion and delivery
 ├── [transform/](transform/)    # Lambda transformation function
 ├── [tests/](tests/)            # Test suite (AI-generated)
-├── [cloudformation/](cloudformation/)  # CloudFormation templates for Glue resources
+├── [.aws/cloudformation/](.aws/cloudformation/)  # CloudFormation templates for Glue resources
 ├── [scripts/](scripts/)         # Utility scripts
 ├── [quicksight/](quicksight/)   # QuickSight dashboard examples and documentation
 └── main.py                     # Application entry point
@@ -208,7 +208,7 @@ roxxane/
 
 - **[tests/](tests/)** - Comprehensive test suite covering unit, integration, property-based, and performance tests. Test suite was generated with AI assistance.
 
-- **[cloudformation/](cloudformation/)** - CloudFormation templates for AWS Glue resources including database, table, and crawler definitions.
+- **[.aws/cloudformation/](.aws/cloudformation/)** - CloudFormation templates for AWS Glue resources including database, table, and crawler definitions.
 
 - **[scripts/](scripts/)** - Utility scripts for manual Lambda packaging and other development tasks.
 

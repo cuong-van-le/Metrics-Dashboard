@@ -111,6 +111,8 @@ iac/state.json
 a.txt
 
 .aws/
+!.aws/cloudformation/
+!.aws/cloudformation/**
 
 Thumbs.db
 .DS_Store
