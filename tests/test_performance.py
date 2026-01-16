@@ -67,6 +67,7 @@ class TestPerformance:
         result = benchmark.pedantic(run, rounds=100, iterations=1)
         assert result is not None
 
+    @pytest.mark.unit
     def test_sequential_vs_parallel_creation(self, mock_config):
         orchestrator = InfrastructureOrchestrator()
         
