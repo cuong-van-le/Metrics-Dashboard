@@ -84,6 +84,7 @@ class TestPerformance:
         assert "resource2" in results
         assert elapsed < 0.25
 
+    @pytest.mark.unit
     def test_large_dependency_graph_performance(self, mock_config):
         orchestrator = InfrastructureOrchestrator()
         

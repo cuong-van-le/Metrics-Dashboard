@@ -7,6 +7,7 @@ from config.main import Config
 class TestConfig:
     """Test Config class."""
 
+    @pytest.mark.unit
     def test_config_loads_from_env(self, mock_env_vars):
         """Test that Config loads all required variables."""
         config = Config.from_env()
@@ -23,16 +24,19 @@ class TestConfig:
         assert config.LAMBDA_TIMEOUT == 60
         assert config.LAMBDA_MEMORY_MB == 256
 
+    @pytest.mark.unit
     def test_config_missing_required_var(self, mock_env_vars_missing):
         """Test that missing required env var raises error."""
         with pytest.raises(RuntimeError, match="Missing required environment variable"):
             Config.from_env()
 
+    @pytest.mark.unit
     def test_config_invalid_integer(self, mock_env_vars_invalid_int):
         """Test that invalid integer values raise error."""
         with pytest.raises(RuntimeError, match="must be an integer"):
             Config.from_env()
 
+    @pytest.mark.unit
     def test_config_empty_string(self, monkeypatch, mock_env_vars):
         """Test that empty string values raise error."""
         monkeypatch.setenv("DELIVERY_STREAM_NAME", "")

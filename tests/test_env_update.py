@@ -1,11 +1,13 @@
 """Tests for .env file update functionality."""
 
+import pytest
 from config.env_updater import EnvUpdater
 
 
 class TestEnvUpdate:
     """Test .env file update functionality."""
 
+    @pytest.mark.unit
     def test_update_env_adds_missing_arns(self, env_file_path):
         """Test that missing ARNs are added to .env."""
         env_file_path.write_text("DELIVERY_STREAM_NAME=test\n")
@@ -24,6 +26,7 @@ class TestEnvUpdate:
             "LAMBDA_ARN=arn:aws:lambda:us-east-1:123456789012:function:test" in content
         )
 
+    @pytest.mark.unit
     def test_update_env_updates_existing_arns(self, env_file_path):
         """Test that existing ARNs are updated."""
         env_file_path.write_text("ROLE_ARN=old-arn\nBUCKET_ARN=old-bucket\n")
@@ -40,6 +43,7 @@ class TestEnvUpdate:
         assert "BUCKET_ARN=arn:aws:s3:::new-bucket" in content
         assert "old-arn" not in content
 
+    @pytest.mark.unit
     def test_update_env_preserves_comments(self, env_file_path):
         """Test that comments are preserved."""
         env_file_path.write_text(
@@ -57,6 +61,7 @@ class TestEnvUpdate:
         assert "# This is a comment" in content
         assert "# Another comment" in content
 
+    @pytest.mark.unit
     def test_update_env_handles_missing_file(self, tmp_path):
         """Test that missing .env file is handled gracefully."""
         missing_path = tmp_path / "missing.env"
@@ -70,6 +75,7 @@ class TestEnvUpdate:
         )
         assert result is False
 
+    @pytest.mark.unit
     def test_update_env_no_changes_needed(self, env_file_path):
         """Test that no changes are made when ARNs match."""
         env_file_path.write_text("ROLE_ARN=arn:aws:iam::123456789012:role/test\n")

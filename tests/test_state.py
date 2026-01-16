@@ -1,12 +1,14 @@
 """Tests for state management."""
 
 import json
+import pytest
 from config.main import State
 
 
 class TestState:
     """Test State class."""
 
+    @pytest.mark.unit
     def test_state_loads_from_file(self, valid_state_file):
         """Test loading state from valid JSON file."""
         state = State.load(path=valid_state_file)
@@ -17,6 +19,7 @@ class TestState:
             == "arn:aws:lambda:us-east-1:123456789012:function:test-lambda"
         )
 
+    @pytest.mark.unit
     def test_state_loads_empty_if_missing(self, tmp_path):
         """Test that missing state file returns empty state."""
         missing_path = tmp_path / "missing.json"
@@ -25,11 +28,13 @@ class TestState:
         assert state.BUCKET_ARN is None
         assert state.LAMBDA_ARN is None
 
+    @pytest.mark.unit
     def test_state_loads_empty_if_corrupted(self, corrupted_state_file):
         """Test that corrupted state file raises error."""
         with pytest.raises(json.JSONDecodeError):
             State.load(path=corrupted_state_file)
 
+    @pytest.mark.unit
     def test_state_saves_to_file(self, tmp_path):
         """Test saving state to file."""
         state_path = tmp_path / "state.json"

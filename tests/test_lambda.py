@@ -11,6 +11,7 @@ from iac.lambda_fn import _package_lambda_code
 class TestLambdaPackaging:
     """Test Lambda code packaging."""
 
+    @pytest.mark.unit
     def test_package_lambda_code(self, transform_dir):
         """Test packaging lambda code from directory."""
         zip_bytes = _package_lambda_code(transform_dir)
@@ -24,6 +25,7 @@ class TestLambdaPackaging:
         zip_file = zipfile.ZipFile(io.BytesIO(zip_bytes))
         assert "app.py" in zip_file.namelist()
 
+    @pytest.mark.unit
     def test_package_empty_directory(self, empty_transform_dir):
         """Test packaging empty directory raises error."""
         # Empty directory should still create a zip, but it will be empty
@@ -34,6 +36,7 @@ class TestLambdaPackaging:
 class TestLambdaProcessor:
     """Test LambdaProcessor class."""
 
+    @pytest.mark.unit
     def test_lambda_exists(self, mock_lambda_client, transform_dir):
         """Test detection of existing lambda."""
         # Mock lambda exists - clear side_effect first
@@ -62,6 +65,7 @@ class TestLambdaProcessor:
         assert isinstance(result, LambdaResult)
         mock_lambda_client.update_function_code.assert_called_once()
 
+    @pytest.mark.unit
     def test_lambda_creation(self, mock_lambda_client, mock_iam_client, transform_dir):
         """Test lambda creation when it doesn't exist."""
         # Mock lambda doesn't exist
@@ -102,6 +106,7 @@ class TestLambdaProcessor:
         assert isinstance(result, LambdaResult)
         mock_lambda_client.create_function.assert_called_once()
 
+    @pytest.mark.unit
     def test_lambda_empty_transform_directory(
         self, mock_lambda_client, mock_iam_client, empty_transform_dir
     ):
@@ -134,6 +139,7 @@ class TestLambdaProcessor:
             with pytest.raises(ValueError, match="transform directory is empty"):
                 processor.ensure()
 
+    @pytest.mark.unit
     def test_lambda_missing_transform_directory(self, mock_lambda_client, mock_iam_client, tmp_path):
         """Test error when transform directory doesn't exist."""
         mock_lambda_client.get_function.side_effect = ClientError(
@@ -165,6 +171,7 @@ class TestLambdaProcessor:
             with pytest.raises(ValueError, match="transform directory is empty"):
                 processor.ensure()
 
+    @pytest.mark.unit
     def test_lambda_role_propagation_retry(
         self, mock_lambda_client, mock_iam_client, transform_dir
     ):

@@ -17,6 +17,7 @@ def mock_config(mock_env_vars):
 
 
 class TestConcurrentResourceCreation:
+    @pytest.mark.unit
     def test_concurrent_bucket_creation(self, mock_config):
         def create_bucket(thread_id):
             orchestrator = InfrastructureOrchestrator()
@@ -41,6 +42,7 @@ class TestConcurrentResourceCreation:
         for result in results:
             assert len(result) == 1
 
+    @pytest.mark.unit
     def test_concurrent_orchestrator_operations(self, mock_config):
         def run_orchestrator(thread_id):
             orchestrator = InfrastructureOrchestrator()
@@ -76,6 +78,7 @@ class TestConcurrentResourceCreation:
         for result in results:
             assert len(result) == 1
 
+    @pytest.mark.unit
     def test_idempotent_concurrent_creation(self, mock_config):
         mock_s3 = MagicMock()
         mock_s3.head_bucket.side_effect = ClientError(
@@ -99,6 +102,7 @@ class TestConcurrentResourceCreation:
         for result in results:
             assert result.bucket_arn == first_arn
 
+    @pytest.mark.unit
     def test_concurrent_dependency_resolution(self, mock_config):
         def create_infrastructure(thread_id):
             orchestrator = InfrastructureOrchestrator()
@@ -124,6 +128,7 @@ class TestConcurrentResourceCreation:
         for result in results:
             assert len(result) == 1
 
+    @pytest.mark.unit
     @pytest.mark.asyncio
     async def test_async_concurrent_creation(self, mock_config):
         async def create_bucket_async(thread_id):
