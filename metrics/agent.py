@@ -13,7 +13,7 @@ try:
 except ImportError:
     PSUTIL_AVAILABLE = False
 
-from metrics.base import Metric, NetworkRate, DiskRate, now
+from metrics.base import DiskRate, Metric, NetworkRate, now
 
 logger = get_logger(__name__)
 
@@ -94,7 +94,7 @@ class MetricsCollector:
         except Exception:
             return None
 
-    def _get_disk_rate(self, interval_s: float) -> Optional[DiskRate]:
+    def _get_disk_rate(self, interval_s: float) -> DiskRate | None:
         if not PSUTIL_AVAILABLE:
             return None
 
@@ -164,7 +164,6 @@ class MetricsCollector:
         )
 
         return metric
-
 
     def start_listener(
         self,

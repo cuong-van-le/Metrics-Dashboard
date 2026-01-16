@@ -9,15 +9,15 @@ from config.main import Config, State
 
 from iac.aws_factory import AWSClientFactory
 from iac.bucket import Bucket
-from iac.lambda_fn import LambdaProcessor
-from iac.role import Role
-from iac.firehose import FireHose
 from iac.configs import (
     BucketConfig,
+    FirehoseConfig,
     LambdaConfig,
     RoleConfig,
-    FirehoseConfig,
 )
+from iac.firehose import FireHose
+from iac.lambda_fn import LambdaProcessor
+from iac.role import Role
 
 logger = get_logger(__name__)
 

@@ -1,14 +1,15 @@
-import pytest
 import asyncio
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import as_completed, ThreadPoolExecutor
 from unittest.mock import MagicMock
+
+import pytest
 from botocore.exceptions import ClientError
 
-from iac.orchestrator import InfrastructureOrchestrator
+from config.main import Config
 from iac.bucket import Bucket
 from iac.configs import BucketConfig
-from config.main import Config
+from iac.orchestrator import InfrastructureOrchestrator
 
 
 @pytest.fixture

@@ -10,7 +10,7 @@ from string import Template
 from botocore.exceptions import ClientError
 
 from iac.base import Resource, ResourceResult
-from iac.configs import RoleConfig, IAMClient
+from iac.configs import IAMClient, RoleConfig
 from iac.constants import ErrorCodes
 from iac.validation import ResourceValidator
 

@@ -4,16 +4,16 @@ from moto import mock_aws
 from config.main import Config
 from iac.aws_factory import AWSClientFactory
 from iac.bucket import Bucket, BucketResult
-from iac.lambda_fn import LambdaProcessor, LambdaResult
-from iac.role import Role, FirehoseRoleResult
-from iac.firehose import FireHose, FirehoseResult
 from iac.configs import (
     BucketConfig,
+    FirehoseConfig,
     LambdaConfig,
     RoleConfig,
-    FirehoseConfig,
 )
+from iac.firehose import FireHose, FirehoseResult
+from iac.lambda_fn import LambdaProcessor, LambdaResult
 from iac.orchestrator import InfrastructureOrchestrator
+from iac.role import FirehoseRoleResult, Role
 
 
 @pytest.fixture

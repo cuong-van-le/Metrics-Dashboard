@@ -1,8 +1,9 @@
 import json
 import shutil
 from unittest.mock import MagicMock
-from botocore.exceptions import ClientError
+
 import pytest
+from botocore.exceptions import ClientError
 
 pytest_plugins = ["pytest_asyncio"]
 

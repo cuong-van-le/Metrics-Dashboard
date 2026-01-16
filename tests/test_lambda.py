@@ -2,10 +2,9 @@
 
 import io
 import zipfile
-
-import pytest
 from unittest.mock import patch
 
+import pytest
 from botocore.exceptions import ClientError
 
 from iac.lambda_fn import LambdaProcessor, LambdaResult, _package_lambda_code

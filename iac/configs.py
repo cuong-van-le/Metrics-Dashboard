@@ -111,7 +111,9 @@ class FirehoseConfig:
             prefix=cfg.PREFIX,
             buffering_size=cfg.BUFFERING_SIZE,
             buffering_time=cfg.BUFFERING_TIME,
-            enable_dynamic_partitioning=getattr(cfg, "ENABLE_DYNAMIC_PARTITIONING", True),
+            enable_dynamic_partitioning=getattr(
+                cfg, "ENABLE_DYNAMIC_PARTITIONING", True
+            ),
             error_output_prefix=getattr(cfg, "ERROR_OUTPUT_PREFIX", None),
             timezone=getattr(cfg, "TIMEZONE", "Europe/Bucharest"),
             enable_parquet=getattr(cfg, "ENABLE_PARQUET", True),
