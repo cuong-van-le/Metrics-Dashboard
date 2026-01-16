@@ -20,15 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install ruff isort mypy
+          pip install ruff mypy
 
       - name: Run Ruff
         run: |
           ruff check . --output-format=github
-
-      - name: Check import sorting with isort
-        run: |
-          isort --check-only .
 
   type-check:
     name: Type Checking
