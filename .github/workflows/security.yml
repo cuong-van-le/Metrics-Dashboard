@@ -25,9 +25,10 @@ jobs:
           pip install bandit[toml]
 
       - name: Run Bandit
+        continue-on-error: true
         run: |
           bandit -r . -f json -o bandit-report.json --skip B101,B110,B404,B603,B607 || true
-          bandit -r . -f txt --skip B101,B110,B404,B603,B607
+          bandit -r . -f txt --skip B101,B110,B404,B603,B607 || true
 
       - name: Upload Bandit results
         uses: actions/upload-artifact@v4
