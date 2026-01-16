@@ -69,7 +69,7 @@ def now(
         os=os,
         os_v=os_v,
         arch=arch,
-        node_role = node_role,
+        node_role=node_role,
         env=env,
-        session_id=SESSION_ID
+        session_id=SESSION_ID,
     )

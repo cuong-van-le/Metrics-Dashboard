@@ -46,7 +46,7 @@ class TestPerformance:
             )
             mock_s3.create_bucket.return_value = {}
             mock_s3.get_bucket_location.return_value = {"LocationConstraint": "us-east-1"}
-            
+
             bucket_config = BucketConfig.from_config(mock_config, mock_config.REGION_NAME)
             bucket_resource = Bucket(bucket_config, mock_s3)
             orchestrator.register("bucket", bucket_resource)

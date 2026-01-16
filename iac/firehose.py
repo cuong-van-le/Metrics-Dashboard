@@ -111,9 +111,9 @@ class FireHose(Resource[FirehoseResult]):
                 "SizeInMBs": self.firehose_config.buffering_size,
                 "IntervalInSeconds": self.firehose_config.buffering_time,
             },
-            "CompressionFormat": "UNCOMPRESSED"
-            if self.firehose_config.enable_parquet
-            else "GZIP",
+            "CompressionFormat": (
+                "UNCOMPRESSED" if self.firehose_config.enable_parquet else "GZIP"
+            ),
             "EncryptionConfiguration": {"NoEncryptionConfig": "NoEncryption"},
             "ProcessingConfiguration": {
                 "Enabled": True,

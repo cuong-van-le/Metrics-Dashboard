@@ -53,25 +53,25 @@ class TestConcurrentResourceCreation:
             )
             mock_s3.create_bucket.return_value = {}
             mock_s3.get_bucket_location.return_value = {"LocationConstraint": "us-east-1"}
-            
+
             bucket_config = BucketConfig.from_config(mock_config, mock_config.REGION_NAME)
             bucket_resource = Bucket(bucket_config, mock_s3)
             orchestrator.register(f"bucket_{thread_id}", bucket_resource)
-            
+
             return orchestrator.ensure_all()
-        
+
         threads = []
         results = []
         
         def worker(thread_id):
             result = run_orchestrator(thread_id)
             results.append(result)
-        
+
         for i in range(10):
             thread = threading.Thread(target=worker, args=(i,))
             threads.append(thread)
             thread.start()
-        
+
         for thread in threads:
             thread.join()
         
@@ -87,17 +87,17 @@ class TestConcurrentResourceCreation:
         )
         mock_s3.create_bucket.return_value = {}
         mock_s3.get_bucket_location.return_value = {"LocationConstraint": "us-east-1"}
-        
+
         bucket_config = BucketConfig.from_config(mock_config, mock_config.REGION_NAME)
         bucket_resource = Bucket(bucket_config, mock_s3)
-        
+
         def ensure_bucket():
             return bucket_resource.ensure()
-        
+
         with ThreadPoolExecutor(max_workers=10) as executor:
             futures = [executor.submit(ensure_bucket) for _ in range(10)]
             results = [future.result() for future in as_completed(futures)]
-        
+
         assert len(results) == 10
         first_arn = results[0].bucket_arn
         for result in results:
@@ -107,7 +107,7 @@ class TestConcurrentResourceCreation:
     def test_concurrent_dependency_resolution(self, mock_config):
         def create_infrastructure(thread_id):
             orchestrator = InfrastructureOrchestrator()
-            
+
             mock_s3 = MagicMock()
             mock_s3.head_bucket.side_effect = ClientError(
                 {"Error": {"Code": "404"}}, "HeadBucket"
@@ -140,13 +140,13 @@ class TestConcurrentResourceCreation:
             )
             mock_s3.create_bucket.return_value = {}
             mock_s3.get_bucket_location.return_value = {"LocationConstraint": "us-east-1"}
-            
+
             bucket_config = BucketConfig.from_config(mock_config, mock_config.REGION_NAME)
             bucket_resource = Bucket(bucket_config, mock_s3)
             orchestrator.register(f"bucket_{thread_id}", bucket_resource)
-            
+
             return orchestrator.ensure_all()
-        
+
         tasks = [create_bucket_async(i) for i in range(5)]
         results = await asyncio.gather(*tasks)
         

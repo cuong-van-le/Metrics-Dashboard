@@ -28,7 +28,7 @@ def aws_clients(mock_aws_services, mock_env_vars):
     region = mock_env_vars["REGION_NAME"]
     factory = AWSClientFactory(region=region)
     iam = factory.create_iam_client()
-    
+
     lambda_role_name = f"{mock_env_vars['LAMBDA_FUNCTION_NAME']}-execution-role"
     trust_policy = {
         "Version": "2012-10-17",
@@ -67,7 +67,7 @@ def aws_clients(mock_aws_services, mock_env_vars):
         )
     except Exception:  # nosec B110
         pass
-    
+
     return {
         "s3": factory.create_s3_client(),
         "lambda": factory.create_lambda_client(),
@@ -86,7 +86,7 @@ class TestIntegrationInfrastructure:
     @pytest.mark.integration
     def test_full_infrastructure_creation(self, aws_clients, test_config, temp_dir):
         orchestrator = InfrastructureOrchestrator()
-        
+
         bucket_config = BucketConfig.from_config(test_config, test_config.REGION_NAME)
         bucket_resource = Bucket(bucket_config, aws_clients["s3"])
         orchestrator.register("bucket", bucket_resource)
@@ -102,9 +102,9 @@ class TestIntegrationInfrastructure:
                 test_config, bucket_res.bucket_arn, lambda_res.lambda_arn
             )
             return Role(role_config, aws_clients["iam"])
-        
+
         orchestrator.register("role", depends_on=["bucket", "lambda"], factory=create_role)
-        
+
         def create_firehose(results):
             firehose_config = FirehoseConfig.from_config(
                 test_config,
@@ -115,11 +115,13 @@ class TestIntegrationInfrastructure:
             firehose_resource = FireHose(firehose_config, aws_clients["firehose"])
             firehose_resource._timeout_s = 5
             return firehose_resource
-        
-        orchestrator.register("firehose", depends_on=["role", "bucket", "lambda"], factory=create_firehose)
-        
+
+        orchestrator.register(
+            "firehose", depends_on=["role", "bucket", "lambda"], factory=create_firehose
+        )
+
         results = orchestrator.ensure_all()
-        
+
         assert "bucket" in results
         assert "lambda" in results
         assert "role" in results
@@ -139,7 +141,7 @@ class TestIntegrationInfrastructure:
     def test_idempotent_creation(self, aws_clients, test_config):
         bucket_config = BucketConfig.from_config(test_config, test_config.REGION_NAME)
         bucket_resource = Bucket(bucket_config, aws_clients["s3"])
-        
+
         result1 = bucket_resource.ensure()
         result2 = bucket_resource.ensure()
         
@@ -148,7 +150,7 @@ class TestIntegrationInfrastructure:
     @pytest.mark.integration
     def test_resource_dependencies(self, aws_clients, test_config):
         orchestrator = InfrastructureOrchestrator()
-        
+
         bucket_config = BucketConfig.from_config(test_config, test_config.REGION_NAME)
         bucket_resource = Bucket(bucket_config, aws_clients["s3"])
         orchestrator.register("bucket", bucket_resource)
@@ -164,11 +166,11 @@ class TestIntegrationInfrastructure:
                 test_config, bucket_res.bucket_arn, lambda_res.lambda_arn
             )
             return Role(role_config, aws_clients["iam"])
-        
+
         orchestrator.register("role", depends_on=["bucket", "lambda"], factory=create_role)
-        
+
         results = orchestrator.ensure_all()
-        
+
         assert "bucket" in results
         assert "lambda" in results
         assert "role" in results
@@ -180,23 +182,23 @@ class TestIntegrationInfrastructure:
     @pytest.mark.integration
     def test_circular_dependency_detection(self):
         orchestrator = InfrastructureOrchestrator()
-        
+
         class MockResource:
             def ensure(self):
                 pass
-        
+
         resource1 = MockResource()
         resource2 = MockResource()
-        
+
         orchestrator.register("resource1", resource1)
         orchestrator.register("resource2", resource2)
-        
+
         def factory1(results):
             return resource1
-        
+
         def factory2(results):
             return resource2
-        
+
         orchestrator.register("resource1", depends_on=["resource2"], factory=factory1)
         orchestrator.register("resource2", depends_on=["resource1"], factory=factory2)
         
