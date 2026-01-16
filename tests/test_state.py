@@ -1,7 +1,9 @@
 """Tests for state management."""
 
 import json
+
 import pytest
+
 from config.main import State
 
 

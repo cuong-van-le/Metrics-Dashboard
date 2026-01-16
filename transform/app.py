@@ -1,11 +1,12 @@
-import json
 import base64
-from typing import Any, Dict
+import json
 from datetime import datetime
+from typing import Any
+
 import pytz
 
 
-def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     output_records = []
     tz = pytz.timezone("Europe/Bucharest")
 
@@ -41,8 +42,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 
 def transform_record(
-    data: Dict[str, Any], tz: pytz.BaseTzInfo
-) -> tuple[Dict[str, Any], Dict[str, str]]:
+    data: dict[str, Any], tz: pytz.BaseTzInfo
+) -> tuple[dict[str, Any], dict[str, str]]:
     if not isinstance(data, dict):
         return data, {}
 

@@ -1,6 +1,7 @@
 """Tests for resource validation utilities."""
 
 import pytest
+
 from iac.validation import ResourceValidator
 
 
@@ -128,7 +129,12 @@ class TestResourceValidator:
     @pytest.mark.unit
     def test_validate_s3_arn_invalid(self):
         """Test invalid S3 ARN formats."""
-        assert ResourceValidator.validate_s3_arn("arn:aws:lambda:us-east-1:123456789012:function:test") is False  # nosec B101
+        assert (
+            ResourceValidator.validate_s3_arn(
+                "arn:aws:lambda:us-east-1:123456789012:function:test"
+            )
+            is False
+        )  # nosec B101
         assert ResourceValidator.validate_s3_arn("not-an-arn") is False  # nosec B101
         assert ResourceValidator.validate_s3_arn(None) is False  # nosec B101
 
@@ -162,6 +168,8 @@ class TestResourceValidator:
     @pytest.mark.unit
     def test_validate_iam_role_arn_invalid(self):
         """Test invalid IAM role ARN formats."""
-        assert ResourceValidator.validate_iam_role_arn("arn:aws:s3:::my-bucket") is False  # nosec B101
+        assert (
+            ResourceValidator.validate_iam_role_arn("arn:aws:s3:::my-bucket") is False
+        )  # nosec B101
         assert ResourceValidator.validate_iam_role_arn("not-an-arn") is False  # nosec B101
         assert ResourceValidator.validate_iam_role_arn(None) is False  # nosec B101

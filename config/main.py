@@ -4,7 +4,7 @@ import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -30,13 +30,13 @@ def _require_int_env(key: str) -> int:
         ) from e
 
 
-def _load_state(path: Path) -> Dict[str, Any]:
+def _load_state(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _optional_env(key: str) -> Optional[str]:
+def _optional_env(key: str) -> str | None:
     return os.getenv(key)
 
 
@@ -56,11 +56,11 @@ class Config:
     LAMBDA_TIMEOUT: int
     LAMBDA_MEMORY_MB: int
 
-    GLUE_DATABASE_NAME: Optional[str] = None
-    GLUE_TABLE_NAME: Optional[str] = None
+    GLUE_DATABASE_NAME: str | None = None
+    GLUE_TABLE_NAME: str | None = None
 
     @staticmethod
-    def from_env() -> "Config":
+    def from_env() -> Config:
         return Config(
             DELIVERY_STREAM_NAME=_require_env("DELIVERY_STREAM_NAME"),
             PREFIX=_require_env("PREFIX"),
@@ -82,12 +82,12 @@ class Config:
 @dataclass(frozen=True, slots=True)
 class State:
     version: str = "1.0"
-    ROLE_ARN: Optional[str] = None
-    BUCKET_ARN: Optional[str] = None
-    LAMBDA_ARN: Optional[str] = None
+    ROLE_ARN: str | None = None
+    BUCKET_ARN: str | None = None
+    LAMBDA_ARN: str | None = None
 
     @staticmethod
-    def load(path: Path = STATE_PATH) -> "State":
+    def load(path: Path = STATE_PATH) -> State:
         raw = _load_state(path)
         version = raw.get("version", "0.0")
 
@@ -102,7 +102,7 @@ class State:
         )
 
     @staticmethod
-    def _migrate(old_state: Dict[str, Any], old_version: str) -> Dict[str, Any]:
+    def _migrate(old_state: dict[str, Any], old_version: str) -> dict[str, Any]:
         migrated = old_state.copy()
 
         if old_version == "0.0":

@@ -1,16 +1,17 @@
-import boto3
 import logging
-from typing import Optional, Dict, Any
+from typing import Any
+
+import boto3
 
 logger = logging.getLogger(__name__)
 
 
 class AWSClientFactory:
-    def __init__(self, region: str, credentials: Optional[Dict[str, Any]] = None):
+    def __init__(self, region: str, credentials: dict[str, Any] | None = None):
         self.region = region
         self.credentials = credentials or {}
 
-    def _get_client_kwargs(self) -> Dict[str, Any]:
+    def _get_client_kwargs(self) -> dict[str, Any]:
         kwargs = {"region_name": self.region}
         kwargs.update(self.credentials)
         return kwargs

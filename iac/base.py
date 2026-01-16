@@ -2,7 +2,7 @@ import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Dict, Any
+from typing import Any, Generic, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class ResourceResult:
 
 
 class Resource(ABC, Generic[T]):
-    def __init__(self, config: Dict[str, Any], client: Any):
+    def __init__(self, config: dict[str, Any], client: Any):
         self.config = config
         self.client = client
 

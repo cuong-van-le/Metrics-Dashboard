@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -11,9 +10,9 @@ class EnvUpdater:
 
     def update(
         self,
-        role_arn: Optional[str] = None,
-        bucket_arn: Optional[str] = None,
-        lambda_arn: Optional[str] = None,
+        role_arn: str | None = None,
+        bucket_arn: str | None = None,
+        lambda_arn: str | None = None,
     ) -> bool:
         if not self.env_path.exists():
             logger.warning(f"{self.env_path} does not exist. Skipping .env update.")

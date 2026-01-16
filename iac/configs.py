@@ -1,31 +1,31 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from config.main import Config
 
 if TYPE_CHECKING:
     try:
-        from mypy_boto3_s3 import S3Client as _S3Client
-        from mypy_boto3_lambda import LambdaClient as _LambdaClient
-        from mypy_boto3_iam import IAMClient as _IAMClient
         from mypy_boto3_firehose import FirehoseClient as _FirehoseClient
+        from mypy_boto3_iam import IAMClient as _IAMClient
+        from mypy_boto3_lambda import LambdaClient as _LambdaClient
+        from mypy_boto3_s3 import S3Client as _S3Client
 
-        S3Client = _S3Client
-        LambdaClient = _LambdaClient
-        IAMClient = _IAMClient
         FirehoseClient = _FirehoseClient
+        IAMClient = _IAMClient
+        LambdaClient = _LambdaClient
+        S3Client = _S3Client
     except ImportError:
-        S3Client = Any
-        LambdaClient = Any
-        IAMClient = Any
         FirehoseClient = Any
+        IAMClient = Any
+        LambdaClient = Any
+        S3Client = Any
 else:
-    S3Client = Any
-    LambdaClient = Any
-    IAMClient = Any
     FirehoseClient = Any
+    IAMClient = Any
+    LambdaClient = Any
+    S3Client = Any
 
 
 @dataclass(frozen=True)
@@ -34,7 +34,7 @@ class BucketConfig:
     region: str
 
     @classmethod
-    def from_config(cls, cfg: Config, region: str) -> "BucketConfig":
+    def from_config(cls, cfg: Config, region: str) -> BucketConfig:
         return cls(bucket_name=cfg.BUCKET_NAME, region=region)
 
 
@@ -45,16 +45,16 @@ class LambdaConfig:
     handler: str
     timeout: int
     memory_mb: int
-    role_arn: Optional[str] = None
-    zip_bytes: Optional[bytes] = None
+    role_arn: str | None = None
+    zip_bytes: bytes | None = None
 
     @classmethod
     def from_config(
         cls,
         cfg: Config,
-        role_arn: Optional[str] = None,
-        zip_bytes: Optional[bytes] = None,
-    ) -> "LambdaConfig":
+        role_arn: str | None = None,
+        zip_bytes: bytes | None = None,
+    ) -> LambdaConfig:
         return cls(
             function_name=cfg.LAMBDA_FUNCTION_NAME,
             runtime=cfg.LAMBDA_RUNTIME,
@@ -70,12 +70,12 @@ class LambdaConfig:
 class RoleConfig:
     role_name: str
     bucket_arn: str
-    lambda_arn: Optional[str] = None
+    lambda_arn: str | None = None
 
     @classmethod
     def from_config(
-        cls, cfg: Config, bucket_arn: str, lambda_arn: Optional[str] = None
-    ) -> "RoleConfig":
+        cls, cfg: Config, bucket_arn: str, lambda_arn: str | None = None
+    ) -> RoleConfig:
         return cls(
             role_name=cfg.ROLE_NAME,
             bucket_arn=bucket_arn,
@@ -93,16 +93,16 @@ class FirehoseConfig:
     buffering_size: int
     buffering_time: int
     enable_dynamic_partitioning: bool = True
-    error_output_prefix: Optional[str] = None
+    error_output_prefix: str | None = None
     timezone: str = "Europe/Bucharest"
     enable_parquet: bool = True
-    glue_database_name: Optional[str] = None
-    glue_table_name: Optional[str] = None
+    glue_database_name: str | None = None
+    glue_table_name: str | None = None
 
     @classmethod
     def from_config(
         cls, cfg: Config, role_arn: str, bucket_arn: str, lambda_arn: str
-    ) -> "FirehoseConfig":
+    ) -> FirehoseConfig:
         return cls(
             delivery_stream_name=cfg.DELIVERY_STREAM_NAME,
             role_arn=role_arn,
