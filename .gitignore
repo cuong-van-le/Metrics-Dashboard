@@ -110,7 +110,7 @@ iac/state.json
 *.pyc
 a.txt
 
-.aws/
+.aws/*
 !.aws/cloudformation/
 !.aws/cloudformation/**
 
